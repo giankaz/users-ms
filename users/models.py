@@ -14,6 +14,8 @@ class User(AbstractUser):
     birthdate = models.DateField()
     is_owner = models.BooleanField(default=False, null=True, blank=True)
     is_active = models.BooleanField(default=True, null=True, blank=True)
+    message = models.CharField(null=True, blank=True, max_length=127)
+    is_superuser = models.BooleanField(null=True, blank=True, default=False)
 
     REQUIRED_FIELDS = ['password',
                        'first_name', 'last_name', 'birthdate', 'is_owner']

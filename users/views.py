@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 
 from users.permissions import ListCreatePermission, LoginPermission, GeneralPermission
 
@@ -59,7 +60,11 @@ class LoginView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        username = serializer.validated_data["username"]
+        username = serializer.validated_data.get("username")
+        email = serializer.validated_data.get("email")
+        if not username and email:
+            found_user = get_object_or_404(User, email=email)
+            username = found_user.username
 
         user = authenticate(
             username=username,
